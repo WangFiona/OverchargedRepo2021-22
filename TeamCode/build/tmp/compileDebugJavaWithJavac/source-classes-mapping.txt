@@ -1,0 +1,355 @@
+overcharged/components/MecanumDrive.java
+ overcharged.components.MecanumDrive
+ overcharged.components.MecanumDrive$1
+overcharged/components/Encoder.java
+ overcharged.components.Encoder
+overcharged/opmode/TrackwidthTest.java
+ overcharged.opmode.TrackwidthTest
+overcharged/components/Intake.java
+ overcharged.components.Intake
+overcharged/util/PIDCalculator.java
+ overcharged.util.PIDCalculator
+overcharged/linear/util/SelectLinear.java
+ overcharged.linear.util.SelectLinear
+overcharged/drive/SampleMecanumDrive.java
+ overcharged.drive.SampleMecanumDrive
+overcharged/test/TestDistanceSensors.java
+ overcharged.test.TestDistanceSensors
+overcharged/linear/components/TankDriveLinearTest2.java
+ overcharged.linear.components.TankDriveLinearTest2
+ overcharged.linear.components.TankDriveLinearTest2$1
+overcharged/opmode/curveturntest.java
+ overcharged.opmode.curveturntest
+overcharged/drive/opmode/TurnTest.java
+ overcharged.drive.opmode.TurnTest
+overcharged/components/TankDrive.java
+ overcharged.components.TankDrive
+ overcharged.components.TankDrive$1
+overcharged/components/SlideSixWheel.java
+ overcharged.components.SlideSixWheel
+overcharged/test/TestParking.java
+ overcharged.test.TestParking
+overcharged/test/DuckDetection.java
+ overcharged.test.DuckDetection
+overcharged/components/RingDetector.java
+ overcharged.components.RingDetector
+overcharged/test/TestDev2.java
+ overcharged.test.TestDev2
+overcharged/components/OcBnoGyro.java
+ overcharged.components.OcBnoGyro
+overcharged/drive/opmode/StrafeTest.java
+ overcharged.drive.opmode.StrafeTest
+overcharged/linear/components/RobotTankMecanumLinear.java
+ overcharged.linear.components.RobotTankMecanumLinear
+overcharged/opmode/mblueauto.java
+ overcharged.opmode.mblueauto
+overcharged/util/DashboardUtil.java
+ overcharged.util.DashboardUtil
+overcharged/util/GradualBrake.java
+ overcharged.util.GradualBrake
+overcharged/test/TestServo.java
+ overcharged.test.TestServo
+overcharged/components/NavxImu.java
+ overcharged.components.NavxImu
+overcharged/trajectorysequence/EmptySequenceException.java
+ overcharged.trajectorysequence.EmptySequenceException
+overcharged/trajectorysequence/TrajectorySequence.java
+ overcharged.trajectorysequence.TrajectorySequence
+overcharged/linear/util/WaitLinear.java
+ overcharged.linear.util.WaitLinear
+ overcharged.linear.util.WaitLinear$WakeUp
+overcharged/test/TestCurve.java
+ overcharged.test.TestCurve
+overcharged/test/TestSwitch.java
+ overcharged.test.TestSwitch
+overcharged/test/ServoTestInfo.java
+ overcharged.test.ServoTestInfo
+overcharged/components/OcServo.java
+ overcharged.components.OcServo
+overcharged/components/RingPosition.java
+ overcharged.components.RingPosition
+overcharged/test/EasyOpenCVExample.java
+ overcharged.test.EasyOpenCVExample
+ overcharged.test.EasyOpenCVExample$1
+ overcharged.test.EasyOpenCVExample$RingDeterminationPipeline
+ overcharged.test.EasyOpenCVExample$RingDeterminationPipeline$RingPosition
+overcharged/drive/SampleTankDrive.java
+ overcharged.drive.SampleTankDrive
+overcharged/test/RingDetection.java
+ overcharged.test.RingDetection
+overcharged/drive/opmode/MaxAngularVeloTuner.java
+ overcharged.drive.opmode.MaxAngularVeloTuner
+overcharged/components/SensorDistance.java
+ overcharged.components.SensorDistance
+overcharged/config/RobotConstants.java
+ overcharged.config.RobotConstants
+ overcharged.config.RobotConstants$COLOR_SENSOR
+overcharged/opmode/slidesThread.java
+ overcharged.opmode.slidesThread
+overcharged/test/TestSmoothPath.java
+ overcharged.test.TestSmoothPath
+overcharged/util/AssetsTrajectoryManager.java
+ overcharged.util.AssetsTrajectoryManager
+overcharged/components/RobotTankMecanum.java
+ overcharged.components.RobotTankMecanum
+overcharged/components/TurnType.java
+ overcharged.components.TurnType
+overcharged/test/TestOneMotorPerSide.java
+ overcharged.test.TestOneMotorPerSide
+overcharged/odometry/PathFollower.java
+ overcharged.odometry.PathFollower
+overcharged/components/Button.java
+ overcharged.components.Button
+overcharged/test/ConceptVuforiaUltimateGoalNavigationWebcam.java
+ overcharged.test.ConceptVuforiaUltimateGoalNavigationWebcam
+overcharged/test/ConceptVuforiaUltimateGoalNavigation.java
+ overcharged.test.ConceptVuforiaUltimateGoalNavigation
+overcharged/odometry/SmoothPath.java
+ overcharged.odometry.SmoothPath
+overcharged/autonomous/WarehouseAuto.java
+ overcharged.autonomous.WarehouseAuto
+ overcharged.autonomous.WarehouseAuto$DistanceValue
+ overcharged.autonomous.WarehouseAuto$Lap
+ overcharged.autonomous.WarehouseAuto$LapTimer
+overcharged/odometry/Localization.java
+ overcharged.odometry.Localization
+overcharged/trajectorysequence/TrajectorySequenceRunner.java
+ overcharged.trajectorysequence.TrajectorySequenceRunner
+overcharged/test/DuckDetectionRed.java
+ overcharged.test.DuckDetectionRed
+overcharged/util/LoggingUtil.java
+ overcharged.util.LoggingUtil
+overcharged/components/QwiicLEDStrip.java
+ overcharged.components.QwiicLEDStrip
+ overcharged.components.QwiicLEDStrip$Commands
+overcharged/components/DuckDetector.java
+ overcharged.components.DuckDetector
+overcharged/drive/opmode/StraightTest.java
+ overcharged.drive.opmode.StraightTest
+overcharged/components/Robot6WheelTest.java
+ overcharged.components.Robot6WheelTest
+overcharged/test/AutonomousTestTurn.java
+ overcharged.test.AutonomousTestTurn
+overcharged/path/PathPlanner.java
+ overcharged.path.PathPlanner
+overcharged/test/ArmTest.java
+ overcharged.test.ArmTest
+overcharged/drive/opmode/DriveVelocityPIDTuner.java
+ overcharged.drive.opmode.DriveVelocityPIDTuner
+ overcharged.drive.opmode.DriveVelocityPIDTuner$1
+ overcharged.drive.opmode.DriveVelocityPIDTuner$Mode
+overcharged/test/Test2FlyWheel.java
+ overcharged.test.Test2FlyWheel
+overcharged/drive/opmode/TrackingWheelForwardOffsetTuner.java
+ overcharged.drive.opmode.TrackingWheelForwardOffsetTuner
+overcharged/linear/components/TankDriveLinear.java
+ overcharged.linear.components.TankDriveLinear
+overcharged/BuildConfig.java
+ overcharged.BuildConfig
+overcharged/test/FlywheelTester.java
+ overcharged.test.FlywheelTester
+ overcharged.test.FlywheelTester$1
+ overcharged.test.FlywheelTester$FlywheelState
+ overcharged.test.FlywheelTester$IntakeState
+ overcharged.test.FlywheelTester$ValueAdjuster
+overcharged/drive/opmode/SplineTest.java
+ overcharged.drive.opmode.SplineTest
+overcharged/util/AxesSigns.java
+ overcharged.util.AxesSigns
+overcharged/components/Slides.java
+ overcharged.components.Slides
+ overcharged.components.Slides$State
+overcharged/util/Encoder.java
+ overcharged.util.Encoder
+ overcharged.util.Encoder$Direction
+overcharged/linear/components/OcDevicesLinear.java
+ overcharged.linear.components.OcDevicesLinear
+ overcharged.linear.components.OcDevicesLinear$Update
+overcharged/test/Test2FlyWheelPower.java
+ overcharged.test.Test2FlyWheelPower
+overcharged/test/MotorTestInfo.java
+ overcharged.test.MotorTestInfo
+overcharged/util/Stalled.java
+ overcharged.util.Stalled
+overcharged/test/TestServoSimple.java
+ overcharged.test.TestServoSimple
+overcharged/test/Test1FlyWheelPower.java
+ overcharged.test.Test1FlyWheelPower
+overcharged/opmode/RangeTest.java
+ overcharged.opmode.RangeTest
+overcharged/drive/StandardTrackingWheelLocalizer.java
+ overcharged.drive.StandardTrackingWheelLocalizer
+overcharged/components/Robot6WheelTest2.java
+ overcharged.components.Robot6WheelTest2
+overcharged/test/TestMotor.java
+ overcharged.test.TestMotor
+overcharged/test/TestOdometryEncoder.java
+ overcharged.test.TestOdometryEncoder
+overcharged/components/OcBnoGyro2.java
+ overcharged.components.OcBnoGyro2
+overcharged/test/TestOcLed.java
+ overcharged.test.TestOcLed
+ overcharged.test.TestOcLed$LedState
+overcharged/pid/Controller.java
+ overcharged.pid.Controller
+overcharged/drive/opmode/FollowerPIDTuner.java
+ overcharged.drive.opmode.FollowerPIDTuner
+overcharged/components/OcSwitch.java
+ overcharged.components.OcSwitch
+overcharged/linear/components/OcMotorsLinear.java
+ overcharged.linear.components.OcMotorsLinear
+ overcharged.linear.components.OcMotorsLinear$1
+ overcharged.linear.components.OcMotorsLinear$2
+ overcharged.linear.components.OcMotorsLinear$3
+ overcharged.linear.components.OcMotorsLinear$4
+overcharged/test/SixWheelDrive.java
+ overcharged.test.SixWheelDrive
+overcharged/linear/components/Robot6WheelLinear.java
+ overcharged.linear.components.Robot6WheelLinear
+overcharged/drive/DriveConstants.java
+ overcharged.drive.DriveConstants
+overcharged/drive/opmode/BackAndForth.java
+ overcharged.drive.opmode.BackAndForth
+overcharged/autonomous/DuckAuto.java
+ overcharged.autonomous.DuckAuto
+overcharged/components/Drive.java
+ overcharged.components.Drive
+overcharged/opmode/teleop.java
+ overcharged.opmode.teleop
+ overcharged.opmode.teleop$DuckStep
+ overcharged.opmode.teleop$IntakeStep
+overcharged/util/BNO055IMUUtil.java
+ overcharged.util.BNO055IMUUtil
+overcharged/drive/opmode/MovingAndTurningDemo.java
+ overcharged.drive.opmode.MovingAndTurningDemo
+overcharged/opmode/LedThread.java
+ overcharged.opmode.LedThread
+overcharged/components/DuckNoPID.java
+ overcharged.components.DuckNoPID
+overcharged/test/TestQwiicLedStrip.java
+ overcharged.test.TestQwiicLedStrip
+overcharged/test/Test1FlyWheelVelocity.java
+ overcharged.test.Test1FlyWheelVelocity
+overcharged/components/EncoderController.java
+ overcharged.components.EncoderController
+ overcharged.components.EncoderController$EncoderTurnType
+overcharged/components/CupSixWheel.java
+ overcharged.components.CupSixWheel
+overcharged/components/OcGyro.java
+ overcharged.components.OcGyro
+overcharged/opmode/sixwheelteleop.java
+ overcharged.opmode.sixwheelteleop
+overcharged/drive/opmode/TrackingWheelLateralDistanceTuner.java
+ overcharged.drive.opmode.TrackingWheelLateralDistanceTuner
+overcharged/test/TeleOpRobot6WheelTest.java
+ overcharged.test.TeleOpRobot6WheelTest
+overcharged/trajectorysequence/sequencesegment/SequenceSegment.java
+ overcharged.trajectorysequence.sequencesegment.SequenceSegment
+overcharged/test/mecanumTurn.java
+ overcharged.test.mecanumTurn
+overcharged/opmode/Tester.java
+ overcharged.opmode.Tester
+ overcharged.opmode.Tester$1
+ overcharged.opmode.Tester$ETest
+overcharged/test/TestTurn.java
+ overcharged.test.TestTurn
+overcharged/drive/opmode/MaxVelocityTuner.java
+ overcharged.drive.opmode.MaxVelocityTuner
+overcharged/linear/components/OcEncoder.java
+ overcharged.linear.components.OcEncoder
+overcharged/opmode/redauto.java
+ overcharged.opmode.redauto
+overcharged/components/Cup.java
+ overcharged.components.Cup
+ overcharged.components.Cup$FreightType
+overcharged/test/TestSlides.java
+ overcharged.test.TestSlides
+overcharged/test/TestColor.java
+ overcharged.test.TestColor
+ overcharged.test.TestColor$COLORTYPE
+overcharged/test/Test1FlyWheelEncoderPower.java
+ overcharged.test.Test1FlyWheelEncoderPower
+overcharged/components/Robot6Wheel.java
+ overcharged.components.Robot6Wheel
+overcharged/opmode/mecanumTeleop.java
+ overcharged.opmode.mecanumTeleop
+ overcharged.opmode.mecanumTeleop$DuckStep
+ overcharged.opmode.mecanumTeleop$IntakeStep
+overcharged/util/LynxModuleUtil.java
+ overcharged.util.LynxModuleUtil
+ overcharged.util.LynxModuleUtil$LynxFirmwareVersion
+ overcharged.util.LynxModuleUtil$LynxFirmwareVersionException
+overcharged/components/OcGyro2.java
+ overcharged.components.OcGyro2
+overcharged/opmode/redteleop.java
+ overcharged.opmode.redteleop
+overcharged/drive/AggressiveMecanumDrive.java
+ overcharged.drive.AggressiveMecanumDrive
+overcharged/linear/components/Robot6WheelTestLinear.java
+ overcharged.linear.components.Robot6WheelTestLinear
+overcharged/trajectorysequence/sequencesegment/WaitSegment.java
+ overcharged.trajectorysequence.sequencesegment.WaitSegment
+overcharged/components/OcLed.java
+ overcharged.components.OcLed
+ overcharged.components.OcLed$1
+ overcharged.components.OcLed$ELedStatus
+overcharged/opmode/blueauto.java
+ overcharged.opmode.blueauto
+overcharged/components/Duck.java
+ overcharged.components.Duck
+overcharged/trajectorysequence/sequencesegment/TrajectorySegment.java
+ overcharged.trajectorysequence.sequencesegment.TrajectorySegment
+overcharged/test/TestBothMotorsPerSide.java
+ overcharged.test.TestBothMotorsPerSide
+overcharged/components/RobotMecanum.java
+ overcharged.components.RobotMecanum
+overcharged/components/Slide.java
+ overcharged.components.Slide
+overcharged/linear/components/MoveAction.java
+ overcharged.linear.components.MoveAction
+overcharged/components/DuckPositions.java
+ overcharged.components.DuckPositions
+overcharged/components/OcMotorEx.java
+ overcharged.components.OcMotorEx
+overcharged/components/OcDevice.java
+ overcharged.components.OcDevice
+overcharged/test/TestRunnable.java
+ overcharged.test.TestRunnable
+overcharged/opmode/ServoTesting.java
+ overcharged.opmode.ServoTesting
+overcharged/components/Cap.java
+ overcharged.components.Cap
+overcharged/trajectorysequence/TrajectorySequenceBuilder.java
+ overcharged.trajectorysequence.TrajectorySequenceBuilder
+ overcharged.trajectorysequence.TrajectorySequenceBuilder$1ComparingPoints
+ overcharged.trajectorysequence.TrajectorySequenceBuilder$AddPathCallback
+overcharged/components/OcMotor.java
+ overcharged.components.OcMotor
+overcharged/opmode/mredauto.java
+ overcharged.opmode.mredauto
+overcharged/drive/opmode/ManualFeedforwardTuner.java
+ overcharged.drive.opmode.ManualFeedforwardTuner
+ overcharged.drive.opmode.ManualFeedforwardTuner$1
+ overcharged.drive.opmode.ManualFeedforwardTuner$Mode
+overcharged/drive/opmode/AutomaticFeedforwardTuner.java
+ overcharged.drive.opmode.AutomaticFeedforwardTuner
+overcharged/opmode/mSlidesThread.java
+ overcharged.opmode.mSlidesThread
+overcharged/drive/opmode/LocalizationTest.java
+ overcharged.drive.opmode.LocalizationTest
+overcharged/components/Arm.java
+ overcharged.components.Arm
+overcharged/linear/components/RotationAxis.java
+ overcharged.components.RotationAxis
+overcharged/linear/components/Robot6WheelTest2Linear.java
+ overcharged.linear.components.Robot6WheelTest2Linear
+overcharged/trajectorysequence/sequencesegment/TurnSegment.java
+ overcharged.trajectorysequence.sequencesegment.TurnSegment
+overcharged/drive/opmode/TrackWidthTuner.java
+ overcharged.drive.opmode.TrackWidthTuner
+overcharged/drive/opmode/MotorDirectionDebugger.java
+ overcharged.drive.opmode.MotorDirectionDebugger
+overcharged/util/RegressionUtil.java
+ overcharged.util.RegressionUtil
+ overcharged.util.RegressionUtil$AccelResult
+ overcharged.util.RegressionUtil$RampResult
