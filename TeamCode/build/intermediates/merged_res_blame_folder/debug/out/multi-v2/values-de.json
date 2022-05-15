@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/fionawang/FTC/Repo2022/TeamCode/build/intermediates/incremental/mergeDebugResources/merged.dir/values-de/values-de.xml",
+            "outputFile": "/Users/fionawang/FTC/OverchargedRepo2021-22/TeamCode/build/intermediates/incremental/mergeDebugResources/merged.dir/values-de/values-de.xml",
             "map": [
                 {
                     "source": "/Users/fionawang/.gradle/caches/transforms-3/bfcbf161df86e8959e8196b0cb0afd0e/transformed/appcompat-1.2.0/res/values-de/values-de.xml",
