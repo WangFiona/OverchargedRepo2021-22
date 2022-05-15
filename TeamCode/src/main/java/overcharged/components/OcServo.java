@@ -39,19 +39,22 @@ public class OcServo
 
     /**
      * initialize servos
-     * @param hardwareMap HardwareMap to get servos from
+     * @param servo servo
      * @param id name of servo
+     * @param initialPosition starting servo position
      * @throws IllegalArgumentException exception
      */
-    public OcServo(HardwareMap hardwareMap,
-                   String id)
+    public OcServo(Servo servo,
+                   String id,
+                   float initialPosition)
             throws IllegalArgumentException
     {
         super(id);
         RobotLog.ii(TAG_H, "Constructor for Servo " + id);
         this.initialPosition = initialPosition;
 
-        this.servo = hardwareMap.servo.get(id);
+        this.servo = servo;
+        this.servo.setPosition(initialPosition);
     }
 
     /**

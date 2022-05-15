@@ -7,20 +7,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Cup {
-    Servo cup;
-    RevColorSensorV3 colorSensor;
+    public Servo cup;
+    public RevColorSensorV3 colorSensor;
 
-    double open = 0.25;
-    double lockedBlock = 0.12;
-    double lockedBall = 0.17;
-    double lockedDuck = 0.06;
-    double dump = 0.42;
+    public static final double open = 0.25;
+    public static final double lockedBlock = 0.12;
+    public static final double lockedBall = 0.17;
+    public static final double lockedDuck = 0.06;
+    public static final double dump = 0.42;
 
-    double ballLight = 2020;
+    public static final double ballLight = 2020;
     ///empty cup 7.52cm - 8.95cm, block 1.85cm - 3.24cm, ball 0.64cm - 1.17cm
     ///based on the above readings its safe to assume that if the distance is less than 7.52cm,
     ///something is collected. But to be safe setting the value to 5
-    double distance = 5;
+    public static final double distance = 5;
 
     public Cup(HardwareMap hardwareMap){
         cup = hardwareMap.servo.get("cup");

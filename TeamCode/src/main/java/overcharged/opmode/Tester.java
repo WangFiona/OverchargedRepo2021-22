@@ -39,7 +39,8 @@ Tester
     //OcSwitch slideSwitch;
     //private TankDriveLinear drive;
 
-    /**
+    private ServoTestInfo[] servoTestInfos;
+     /**
      * Counter of servos in servo test
      */
     private int servoTestCounter = 0;
@@ -49,7 +50,8 @@ Tester
     private int servoCalibrateCounter = 0;
 
     private final static int MIN_SERVO_TICK = 1;
-    private final static DecimalFormat numberFormatter = new DecimalFormat("######");
+    private final static DecimalFormat integerFormatter = new DecimalFormat("######");
+    private final static DecimalFormat decimalFormatter = new DecimalFormat("###.##");
 
     /**
      * Enumeration for the different tests
@@ -58,11 +60,12 @@ Tester
         NONE,
         SWITCH,
         ENCODER,
-        MOTOR,
         DRIVE,
         SERVO_CALIBRATE,
         SERVO,
         GYRO,
+        LED,
+        DUCK,
         ;
 
         private static int numberTests = 0;
@@ -108,12 +111,30 @@ Tester
 
         //drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        servoTestInfos = new ServoTestInfo[]{
+            // cup
+            new ServoTestInfo(
+                    new OcServo(robot.cup.cup,
+                            "cup",
+                            (float)robot.cup.open),
+                    (float)robot.cup.dump,
+                    (float)robot.cup.lockedBall,
+                    (float)robot.cup.lockedBlock,
+                    (float)robot.cup.lockedDuck),
+            // cap
+            new ServoTestInfo(
+                    new OcServo(robot.cap.cap,
+                            "cap",
+                            (float)robot.cap.in),
+                    (float)(robot.cap.in - 0.05))
+        };
+
         int testCounter = 0;
         ///Set current test to NONE
         ETest currentTest = ETest.NONE;
 
-        //telemetry.addData("Waiting", "Tester");
-        //telemetry.update();
+        telemetry.addData("Waiting", "Tester");
+        telemetry.update();
         ///Waiting for start to be pressed
         waitForStart();
 
@@ -137,7 +158,7 @@ Tester
 
             telemetry.addData("Test", currentTest);
             telemetry.addData("Select", "Next:RightTrigger Prev:LeftTrigger");
-            telemetry.addData("Confirm", "Start");
+            telemetry.addData("Run", "Start");
 
             ///Loop tests
             if (gamepad1.start && Button.BTN_START.canPress(timeStamp)) {
@@ -145,20 +166,26 @@ Tester
                     case ENCODER:
                         encoderTest();
                         break;
-                    case MOTOR:
-                        motorTest();
-                        break;
                     case DRIVE:
                         driveTest();
                         break;
                     case SERVO_CALIBRATE:
                         servoCalibrate(robot.servos);
                         break;
+                    case SERVO:
+                        servoTest(servoTestInfos);
+                        break;
                     case GYRO:
                         gyroTest();
                         break;
                     case SWITCH:
                         switchTest();
+                        break;
+                    case LED:
+                        ledTest();
+                        break;
+                    case DUCK:
+                        duckTest();
                         break;
                     case NONE:
                     default:
@@ -175,8 +202,10 @@ Tester
      * Test for encoder values of all DC motors in the robot
      */
     private void encoderTest () {
-        /*///Set all motors to FLOAT behavior while unpowered
-        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //Set all motors to FLOAT behavior while unpowered
+        robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.slides.slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.slides.slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         while (opModeIsActive()) {
             long timeStamp = System.currentTimeMillis();
@@ -184,75 +213,33 @@ Tester
             ///Reset encoders on all motors
             if (gamepad1.start && Button.BTN_START.canPress(timeStamp)) {
 
-                drive.resetPosition();
-                robot.resetPosition();
+                robot.drive.resetPosition();
+                robot.slides.resetSlidePosition();
                 idle();
             }
             else if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
                 break;
             }
 
+            if (robot.slides.isSlideSwitchPressed()) {
+                robot.slides.resetSlidePosition();
+            }
             telemetry.addData("Front",
-                    "Left:" + numberFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
-                            "Right:" + numberFormatter.format(robot.driveRightFront.getCurrentPosition()));
+                    "Left:" + integerFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
+                            "Right:" + integerFormatter.format(robot.driveRightFront.getCurrentPosition()));
             telemetry.addData("Back",
-                    "Left:" + numberFormatter.format(robot.driveLeftBack.getCurrentPosition()) +
-                            "Right:" + numberFormatter.format(robot.driveRightBack.getCurrentPosition()));
+                    "Left:" + integerFormatter.format(robot.driveLeftBack.getCurrentPosition()) +
+                            "Right:" + integerFormatter.format(robot.driveRightBack.getCurrentPosition()));
             telemetry.addData("Slides:",
-                    numberFormatter.format(robot.slideencoder.getPosition()));
+                    integerFormatter.format(robot.slides.getCurrentPosition()));
             telemetry.addData("Reset", "Start");
-            telemetry.addData("Stop", "Back");
+            telemetry.addData("Back", "LeftStick");
 
             telemetry.update();
             idle();
         }
         ///Set drive train motors to BRAKE behavior while unpowered
-        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        idle();*/
-    }
-
-    /**
-     * Test the motors
-     */
-    private void motorTest () {
-        float[] powers = new float[]{0.25f, -0.25f};
-
-        MotorTestInfo[] motorTestInfos = new MotorTestInfo[]{new MotorTestInfo(robot.driveLeftFront, "driveLF"),
-                new MotorTestInfo(robot.driveLeftBack,"driveLB"),
-                new MotorTestInfo(robot.driveRightFront,"driveRF"),
-                new MotorTestInfo(robot.driveRightBack, "driveRB")
-        };
-
-        back:
-        for (MotorTestInfo motorTestInfo : motorTestInfos) {
-            for (float power : powers) {
-                motorTestInfo.stop();
-
-                long startTimestamp = System.currentTimeMillis();
-                long timeStamp = startTimestamp;
-
-                while (opModeIsActive() &&
-                        timeStamp - startTimestamp < 5000) {
-                    telemetry.addData("Motor", motorTestInfo.motorName);
-                    telemetry.addData("Power", power);
-                    telemetry.addData("CurrentPosition", motorTestInfo.motor.getCurrentPosition());
-
-                    motorTestInfo.motor.setPower(power);
-
-                    telemetry.addData("Stop", "Back");
-
-                    if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
-                        break back;
-                    }
-
-                    telemetry.update();
-                    idle();
-                    timeStamp = System.currentTimeMillis();
-                }
-                motorTestInfo.stop();
-            }
-        }
-
+        robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         idle();
     }
 
@@ -260,6 +247,9 @@ Tester
      * Test the limit switches at the bottom and top of the slide system
      */
     private void switchTest () {
+        robot.slides.slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.slides.slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         while (opModeIsActive()) {
             long timeStamp = System.currentTimeMillis();
 
@@ -267,12 +257,13 @@ Tester
                 break;
             }
 
-            telemetry.addData("slide switch", Boolean.toString(robot.slides.slideReachedBottom()));
+            telemetry.addData("Test", "Switches");
+            telemetry.addData(robot.slides.switchSlideDown.toString(), Boolean.toString(robot.slides.switchSlideDown.isTouch()));
             /*for (OcSwitch s : robot.switchs) {
                 telemetry.addData(s.toString(), Boolean.toString(s.isTouch()));
             }*/
 
-            telemetry.addData("Stop", "Back");
+            telemetry.addData("Back", "LeftStick");
 
             telemetry.update();
             idle();
@@ -315,22 +306,19 @@ Tester
             } else if (gamepad1.y && Button.BTN_MAX.canPress(timeStamp)) {
                 posJoy1 = 255;
             } else if (gamepad1.a && Button.BTN_MIN.canPress(timeStamp)) {
-                if (servoCalibrateCounter == 5) {
-                    posJoy1 = 100;
-                } else {
-                    posJoy1 = 0;
-                }
+                posJoy1 = 0;
             } else if (gamepad1.right_stick_button && Button.BTN_MID.canPress(timeStamp)) {
                 posJoy1 = 128;
             }
             posJoy1 = Range.clip(posJoy1, 0, 255);
             servoCalibrateList.get(servoCalibrateCounter).setPosition(posJoy1/255f);
 
-            telemetry.addData("Adjust", "+: B -: X Max: Y Min: A Mid: RStick");
-            telemetry.addData("Position", Integer.toString(posJoy1));
+            telemetry.addData("Test", "ServoCalibrate");
+            telemetry.addData("Adjust", "+:B -:X Max:Y Min:A Mid:RStick");
+            telemetry.addData("Position", integerFormatter.format(posJoy1));
             telemetry.addData("Servo", servoCalibrateList.get(servoCalibrateCounter));
             telemetry.addData("Select", "Next: RightTrigger Prev: LeftTrigger");
-            telemetry.addData("Stop", "Back");
+            telemetry.addData("Back", "LeftStick");
 
             telemetry.update();
             idle();
@@ -363,10 +351,11 @@ Tester
                 servoTest(servoTestInfos[servoTestCounter]);
             }
 
+            telemetry.addData("Test", "Servo");
             telemetry.addData("Select", "Next:RightTrigger Prev:LeftTrigger");
             telemetry.addData("Servo", servoTestInfos[servoTestCounter].servo);
-            telemetry.addData("Confirm", "Start");
-            telemetry.addData("Stop", "Back");
+            telemetry.addData("Run", "Start");
+            telemetry.addData("Back", "LeftStick");
 
             telemetry.update();
             idle();
@@ -400,9 +389,10 @@ Tester
                     return;
                 }
 
-                telemetry.addData("Position", Float.toString(servoTestInfo.servo.getPosition()));
+                telemetry.addData("Test", "Servo");
+                telemetry.addData("Position", integerFormatter.format(servoTestInfo.servo.getPosition()));
                 telemetry.addData("Servo", servoTestInfo.servo);
-                telemetry.addData("Stop", "Back");
+                telemetry.addData("Back", "LeftStick");
 
                 telemetry.update();
                 idle();
@@ -415,66 +405,57 @@ Tester
      * Test the drive train, motors, and servos
      */
     private void driveTest () {
-        /*float[][] powers = new float[][]{
+        float[][] powers = new float[][]{
                 {0.75f, 0.75f},
                 {-0.75f, -0.75f},
                 {0.75f, -0.75f},
                 {-0.75f, 0.75f},
         };
 
-        TurnType[] turnTypes = new TurnType[]{
-                TurnType.TURN_REGULAR,
-                TurnType.TURN_RIGHT_PIVOT,
-                TurnType.TURN_LEFT_PIVOT,
-        };
-
         back:
-        for (TurnType turnType : turnTypes) {
-            for (float[] power : powers) {
-                drive.resetPosition();
+        for (float[] power : powers) {
+            robot.drive.resetPosition();
 
-                long startTimestamp = System.currentTimeMillis();
-                long timeStamp = startTimestamp;
+            long startTimestamp = System.currentTimeMillis();
+            long timeStamp = startTimestamp;
 
-                while (opModeIsActive() &&
-                        timeStamp - startTimestamp < 5000) {
+            while (opModeIsActive() &&
+                    timeStamp - startTimestamp < 5000) {
 
-                    if (turnType == TurnType.TANK) {
-                        telemetry.addData("DriveType", "TANK");
-                        drive.setPower(power[0], power[1]);
-                    }
-                    drive.setPower(power[0], power[1], turnType);
+                robot.drive.setPower(power[0], power[1]);
 
-                    telemetry.addData("Front",
-                            "Left:" + numberFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
-                                    " Right:" + numberFormatter.format(robot.driveRightFront.getCurrentPosition()));
-                    telemetry.addData("Back",
-                            "Left:" + numberFormatter.format(robot.driveLeftBack.getCurrentPosition()) +
-                                    " Right:" + numberFormatter.format(robot.driveRightBack.getCurrentPosition()));
-                    telemetry.addData("Stop", "Back");
+                telemetry.addData("Test", "Drive");
+                telemetry.addData("Front",
+                        "Left:" + integerFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
+                                " Right:" + integerFormatter.format(robot.driveRightFront.getCurrentPosition()));
+                telemetry.addData("Back",
+                        "Left:" + integerFormatter.format(robot.driveLeftBack.getCurrentPosition()) +
+                                " Right:" + integerFormatter.format(robot.driveRightBack.getCurrentPosition()));
+                telemetry.addData("Back", "LeftStick");
 
-                    if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
-                        break back;
-                    }
-
-                    telemetry.update();
-                    idle();
-                    timeStamp = System.currentTimeMillis();
+                if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                    break back;
                 }
 
-                drive.stop();
+                telemetry.update();
+                idle();
+                timeStamp = System.currentTimeMillis();
             }
+
+            robot.drive.stop();
         }
 
-        drive.stop();
-        drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        idle();*/
+        robot.drive.stop();
+        robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        idle();
     }
 
     /**
      * Test showing IMU headings
      */
     private void gyroTest() {
+        robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         while (opModeIsActive()) {
             long timeStamp = System.currentTimeMillis();
 
@@ -487,14 +468,66 @@ Tester
                 break;
             }
 
+            telemetry.addData("Test", "Gyro");
             telemetry.addData("Heading",
-                    Float.toString(robot.gyroSensor.getHeading()));
+                    decimalFormatter.format(robot.gyroSensor.getHeading()));
             telemetry.addData("Reset", "Start");
-            telemetry.addData("Stop", "Back");
+            telemetry.addData("Back", "LeftStick");
 
             telemetry.update();
             idle();
         }
+        robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        idle();
+    }
+
+    private void ledTest() {
+        telemetry.addData("Test", "LED");
+        telemetry.update();
+
+        for (OcLed led: robot.leds) {
+            led.on();
+            led.draw();
+            sleep(800);
+        }
+        sleep(2000);
+        for (OcLed led: robot.leds) {
+            sleep(400);
+            led.off();
+            led.draw();
+        }
+        telemetry.addLine("All LED tested");
+        telemetry.update();
+
+        idle();
+    }
+
+    private void duckTest() {
+        final int TIME = 3000;
+        float power = 0.3f;
+        back:
+        for (int i = 0; i < 2; i++) {
+            long startTime = System.currentTimeMillis();
+            long timeStamp = startTime;
+
+            while (opModeIsActive() && timeStamp - startTime < TIME) {
+                robot.duckNoPID.duck.setPower(power);
+
+                if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                    break back;
+                }
+
+                telemetry.addData("Test", "Duck");
+                telemetry.addData("Back", "LeftStick");
+                telemetry.update();
+                idle();
+                timeStamp = System.currentTimeMillis();
+            }
+            power = -power;
+        }
+
+        // stop the carousel
+        robot.duckNoPID.duck.setPower(0);
         idle();
     }
 }
