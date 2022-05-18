@@ -42,7 +42,7 @@ public class RobotMecanum {
 //    public QwiicLEDStrip ledStrip;
 
     ///Robot Gyro sensor
-    public OcGyro2 gyroSensor;
+    public OcBnoGyro2 gyroSensor;
     public Intake intake;
     public Arm arm;
     public Cup cup;
@@ -152,7 +152,7 @@ public class RobotMecanum {
         }
 
         if (isAutonomous) {
-            OcGyro2 gyro2 = null;
+            OcBnoGyro2 gyro2 = null;
             try {
                 gyro2 = new OcBnoGyro2(hardwareMap, "limu", "rimu");
                 while (isAutonomous && gyro2.isCalibrating()) {

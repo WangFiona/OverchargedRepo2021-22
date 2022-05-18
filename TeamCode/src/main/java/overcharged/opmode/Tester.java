@@ -5,7 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import overcharged.components.Button;
@@ -26,7 +32,7 @@ import overcharged.test.ServoTestInfo;
  * Overcharged Team #12599 Tester
  * This tester program has 16 separate tests.
  */
-@Disabled
+//@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Tester", group="Test")
 public class
 Tester
@@ -44,6 +50,9 @@ Tester
      * Counter of servos in servo test
      */
     private int servoTestCounter = 0;
+
+    private final List<OcServo> servos = new ArrayList<>();
+
     /**
      * Counter for servos for servo calibrate test
      */
@@ -60,6 +69,7 @@ Tester
         NONE,
         SWITCH,
         ENCODER,
+        MOTOR,
         DRIVE,
         SERVO_CALIBRATE,
         SERVO,
@@ -106,26 +116,30 @@ Tester
     @Override
     public void runOpMode() {
         //Initialization
-        robot = new RobotMecanum(this, false, false);
+        robot = new RobotMecanum(this, true, false);
         //drive = robot.getTankDriveLinear();
 
         //drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        OcServo cup = new OcServo(robot.cup.cup,
+                "cup",
+                (float)robot.cup.open);
+        servos.add(cup);
+        OcServo cap = new OcServo(robot.cap.cap,
+                "cap",
+                (float)robot.cap.in);
+        servos.add(cap);
         servoTestInfos = new ServoTestInfo[]{
             // cup
             new ServoTestInfo(
-                    new OcServo(robot.cup.cup,
-                            "cup",
-                            (float)robot.cup.open),
+                    cup,
                     (float)robot.cup.dump,
                     (float)robot.cup.lockedBall,
                     (float)robot.cup.lockedBlock,
                     (float)robot.cup.lockedDuck),
             // cap
             new ServoTestInfo(
-                    new OcServo(robot.cap.cap,
-                            "cap",
-                            (float)robot.cap.in),
+                    cap,
                     (float)(robot.cap.in - 0.05))
         };
 
@@ -166,11 +180,14 @@ Tester
                     case ENCODER:
                         encoderTest();
                         break;
+                    case MOTOR:
+                        motorTest();
+                        break;
                     case DRIVE:
                         driveTest();
                         break;
                     case SERVO_CALIBRATE:
-                        servoCalibrate(robot.servos);
+                        servoCalibrate(servos);
                         break;
                     case SERVO:
                         servoTest(servoTestInfos);
@@ -224,12 +241,13 @@ Tester
             if (robot.slides.isSlideSwitchPressed()) {
                 robot.slides.resetSlidePosition();
             }
+            telemetry.addData("Test", "Encoders");
             telemetry.addData("Front",
-                    "Left:" + integerFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
-                            "Right:" + integerFormatter.format(robot.driveRightFront.getCurrentPosition()));
-            telemetry.addData("Back",
                     "Left:" + integerFormatter.format(robot.driveLeftBack.getCurrentPosition()) +
-                            "Right:" + integerFormatter.format(robot.driveRightBack.getCurrentPosition()));
+                            " Right:" + integerFormatter.format(robot.driveRightBack.getCurrentPosition()));
+            telemetry.addData("Back",
+                    "Left:" + integerFormatter.format(robot.driveLeftFront.getCurrentPosition()) +
+                            " Right:" + integerFormatter.format(robot.driveRightFront.getCurrentPosition()));
             telemetry.addData("Slides:",
                     integerFormatter.format(robot.slides.getCurrentPosition()));
             telemetry.addData("Reset", "Start");
@@ -240,6 +258,59 @@ Tester
         }
         ///Set drive train motors to BRAKE behavior while unpowered
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        idle();
+    }
+
+    /**
+     * Test the motors
+     */
+    private void motorTest () {
+        float[] powers = new float[]{0.25f, -0.25f};
+
+        MotorTestInfo[] motorTestInfos = new MotorTestInfo[]{new MotorTestInfo(robot.driveLeftFront, "driveLF"),
+                new MotorTestInfo(robot.driveLeftBack,"driveLB"),
+                new MotorTestInfo(robot.driveRightFront,"driveRF"),
+                new MotorTestInfo(robot.driveRightBack, "driveRB")
+        };
+
+        back:
+        for (MotorTestInfo motorTestInfo : motorTestInfos) {
+            for (float power : powers) {
+                motorTestInfo.stop();
+
+                long startTimestamp = System.currentTimeMillis();
+                long timeStamp = startTimestamp;
+
+                while (opModeIsActive() &&
+                        timeStamp - startTimestamp < 5000) {
+                    telemetry.addData("Test", "Motors");
+                    telemetry.addData("Motor", motorTestInfo.motorName);
+                    telemetry.addData("Power", power);
+                    telemetry.addData("CurrentPosition", motorTestInfo.motor.getCurrentPosition());
+
+                    motorTestInfo.motor.setPower(power);
+
+                    telemetry.addData("Reset", "Start");
+                    telemetry.addData("Back", "LeftStick");
+
+                    if (gamepad1.start && Button.BTN_START.canPress(timeStamp)) {
+
+                        robot.drive.resetPosition();
+                        //robot.slides.resetSlidePosition();
+                        idle();
+                    }
+                    else if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                        break back;
+                    }
+
+                    telemetry.update();
+                    idle();
+                    timeStamp = System.currentTimeMillis();
+                }
+                motorTestInfo.stop();
+            }
+        }
+
         idle();
     }
 
@@ -406,10 +477,10 @@ Tester
      */
     private void driveTest () {
         float[][] powers = new float[][]{
-                {0.75f, 0.75f},
-                {-0.75f, -0.75f},
-                {0.75f, -0.75f},
-                {-0.75f, 0.75f},
+                {0.25f, 0.25f},
+                {-0.25f, -0.25f},
+                {0.25f, -0.25f},
+                {-0.25f, 0.25f},
         };
 
         back:
@@ -456,12 +527,21 @@ Tester
     private void gyroTest() {
         robot.drive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        float headingLImuBase = 0;
+        float headingRImuBase = 0;
+
         while (opModeIsActive()) {
             long timeStamp = System.currentTimeMillis();
 
+            Orientation anglesLImu = robot.gyroSensor.gyroL.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            float headingLImu = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(anglesLImu.angleUnit, anglesLImu.firstAngle));
+            Orientation anglesRImu = robot.gyroSensor.gyroL.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            float headingRImu = AngleUnit.DEGREES.normalize(AngleUnit.DEGREES.fromUnit(anglesRImu.angleUnit, anglesRImu.firstAngle));
+
             if (gamepad1.start && Button.BTN_START.canPress(timeStamp)) {
 
-                robot.gyroSensor.resetHeading();
+                headingLImuBase = headingLImu;
+                headingRImuBase = headingRImu;
                 idle();
             }
             else if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
@@ -469,8 +549,10 @@ Tester
             }
 
             telemetry.addData("Test", "Gyro");
-            telemetry.addData("Heading",
-                    decimalFormatter.format(robot.gyroSensor.getHeading()));
+            telemetry.addData("gyroLeft",
+                    decimalFormatter.format(headingLImu - headingLImuBase));
+            telemetry.addData("gyroRight",
+                    decimalFormatter.format(headingRImu - headingRImuBase));
             telemetry.addData("Reset", "Start");
             telemetry.addData("Back", "LeftStick");
 

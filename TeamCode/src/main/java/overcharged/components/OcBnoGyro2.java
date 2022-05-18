@@ -19,8 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class OcBnoGyro2
         extends OcGyro2 {
 
-    BNO055IMU gyroL;
-    BNO055IMU gyroR;
+    public BNO055IMU gyroL;
+    public BNO055IMU gyroR;
 
     /**
      * initialize the gyro sensor
