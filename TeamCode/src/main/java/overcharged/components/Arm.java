@@ -36,7 +36,7 @@ public class Arm {
 
     //double adjust = 0.0615;
 
-    public static final double adjust = 0.15772105;//0.5454;
+    public static final double adjust = 0.20132218;//0.5454;
 
     public Arm(HardwareMap hardwareMap, boolean isAutonomous){
         downR += adjust;

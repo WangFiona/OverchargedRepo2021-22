@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -32,9 +33,9 @@ import overcharged.opmode.mSlidesThread;
 import overcharged.test.EasyOpenCVExample;
 import overcharged.trajectorysequence.TrajectorySequence;
 
-@Config
-@Autonomous(name="Less Cycle Warehouse Auto")
-public class LessWarehouseAuto extends LinearOpMode {
+@Disabled
+@Autonomous(name="Faster Warehouse Auto")
+public class FasterWarehouseAuto extends LinearOpMode {
 
     RobotMecanum robot; // stores all peripherals on the robot (everything on the ctrl hub/exp hub except for movement)
     SelectLinear sl = new SelectLinear(this); // lets drivers select options before auto starts
@@ -107,8 +108,8 @@ public class LessWarehouseAuto extends LinearOpMode {
             warehouse = new Vector2d(3, (blue ? 1 : -1) * -30); // where we should start intaking in the warehouse
             //midpoint = new Vector2d(-10, (blue ? 1 : -1) * 19); // where we should dump on the lowest level (this needs to be different because the slides don't move out on preload low)
 
-            final int INTAKE_SPEED = 15; // speed when intaking, needs to be slower to prevent jamming
-            final int FAST_SPEED = 35; // speed whenever we CAN go really fast, usually when hitting walls
+            final int INTAKE_SPEED = 20; // speed when intaking, needs to be slower to prevent jamming
+            final int FAST_SPEED = 50; // speed whenever we CAN go really fast, usually when hitting walls
 
 
             /**
@@ -160,7 +161,7 @@ public class LessWarehouseAuto extends LinearOpMode {
                         robot.intakeOff();
                         raiseSlidesThread(lp);
                     })
-                    .splineTo(hub, Math.toRadians(180))
+                    .splineTo(new Vector2d(hub.getX(), hub.getY()-4), Math.toRadians(180))
                     //.splineTo(new Vector2d(hub.getX()+2, (blue ? 1 : -1)*(hub.getY()+4)), Math.toRadians(170))
                     .build();
             goToWarehouse = drive.trajectorySequenceBuilder(splineToHub.end())
@@ -333,7 +334,7 @@ public class LessWarehouseAuto extends LinearOpMode {
         lapTimer.lap("hub -> collected (first cycle)");
 
         int cycleIdx = 0;
-        while (System.currentTimeMillis() - startTime < 24400 && opModeIsActive()) { // keep running this code until we have <3.5 seconds left (~1 cycle)
+        while (System.currentTimeMillis() - startTime < 25000 && opModeIsActive()) { // keep running this code until we have <3.5 seconds left (~1 cycle)
             //relocalizeUsingDistance(wallSensor, lp); // relocalize to maintain accuracy between cycles
 
 

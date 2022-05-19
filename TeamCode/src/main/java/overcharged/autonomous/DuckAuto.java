@@ -99,13 +99,13 @@ public class DuckAuto extends LinearOpMode {
 
             goToHub = drive.trajectorySequenceBuilder(new Pose2d(duckX, (blue ? 1 : -1) * (duckY), (blue ? 1 : -1) * Math.PI/2))
                     .setReversed(true)
-                    .lineTo(new Vector2d((blue ? hubX : hubX+4), (blue ? 1 : -1) * (duckY+1)))
-                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+4), (blue ? 1 : -1) * (duckY+1)), () -> {
+                    .lineTo(new Vector2d((blue ? hubX : hubX+2), (blue ? 1 : -1) * (duckY+1)))
+                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+2), (blue ? 1 : -1) * (duckY+1)), () -> {
                         raiseSlidesThread(lp);
                         robot.intakeOff();
                     })
-                    .lineTo(new Vector2d((blue ? hubX : hubX+4),duckPositions==DuckPositions.C ? ((blue ? -10 : 8)) : ((blue ? -6 : 4))))
-                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+4), duckPositions==DuckPositions.C ? ((blue ? 1 : -1) * (-6)) : ((blue ? 1 : -1) * (-6))), () -> {
+                    .lineTo(new Vector2d((blue ? hubX : hubX+2),duckPositions==DuckPositions.C ? ((blue ? -8 : 5)) : ((blue ? -6 : 5))))
+                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+2), duckPositions==DuckPositions.C ? ((blue ? 1 : -1) * (-6)) : ((blue ? 1 : -1) * (-6))), () -> {
                         robot.cupDump();
                     })
                     .build();
@@ -127,7 +127,7 @@ public class DuckAuto extends LinearOpMode {
             park = drive.trajectorySequenceBuilder(goToHub.end())
                     .setReversed(false)
                     .lineTo(new Vector2d( (blue ? hubX : hubX+4), (blue ? 1 : -1) * (duckY+5)))
-                    .lineTo(new Vector2d((blue ? -26 : -22), (blue ? 1 : -1) * (duckY+5)))
+                    .lineTo(new Vector2d((blue ? -26 : -29), (blue ? 1 : -1) * (duckY+5)))
                     .build();
 
             /**

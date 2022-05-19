@@ -34,13 +34,8 @@ import overcharged.test.ServoTestInfo;
  * Overcharged Team #12599 Tester
  * This tester program has 16 separate tests.
  */
-<<<<<<< Updated upstream
-//@Disabled
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Tester", group="Test")
-=======
 @Config
 @TeleOp(name="Tester", group="Test")
->>>>>>> Stashed changes
 public class
 Tester
         extends LinearOpMode {
