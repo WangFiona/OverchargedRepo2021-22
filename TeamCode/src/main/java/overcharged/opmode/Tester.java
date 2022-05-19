@@ -1,7 +1,9 @@
 package overcharged.opmode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
@@ -32,8 +34,13 @@ import overcharged.test.ServoTestInfo;
  * Overcharged Team #12599 Tester
  * This tester program has 16 separate tests.
  */
+<<<<<<< Updated upstream
 //@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Tester", group="Test")
+=======
+@Config
+@TeleOp(name="Tester", group="Test")
+>>>>>>> Stashed changes
 public class
 Tester
         extends LinearOpMode {
