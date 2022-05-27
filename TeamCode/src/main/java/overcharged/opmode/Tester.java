@@ -18,6 +18,7 @@ import java.util.List;
 
 import overcharged.components.Button;
 import overcharged.components.OcLed;
+import overcharged.components.OcMotorEx;
 import overcharged.components.OcServo;
 import overcharged.components.OcSwitch;
 import overcharged.components.RobotMecanum;
@@ -78,6 +79,8 @@ Tester
         GYRO,
         LED,
         DUCK,
+        INTAKE,
+        SLIDE,
         ;
 
         private static int numberTests = 0;
@@ -205,6 +208,12 @@ Tester
                         break;
                     case DUCK:
                         duckTest();
+                        break;
+                    case INTAKE:
+                        intakeTest();
+                        break;
+                    case SLIDE:
+                        slideTest();
                         break;
                     case NONE:
                     default:
@@ -612,6 +621,82 @@ Tester
 
         // stop the carousel
         robot.duckNoPID.duck.setPower(0);
+        idle();
+    }
+
+    private void intakeTest() {
+        final int TIME = 3000;
+        float power = -0.4f;
+        back:
+        for (int i = 0; i < 2; i++) {
+            long startTime = System.currentTimeMillis();
+            long timeStamp = startTime;
+
+            while (opModeIsActive() && timeStamp - startTime < TIME) {
+                robot.intake.intake.setPower(power);
+
+                if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                    break back;
+                }
+
+                telemetry.addData("Test", "Intake");
+                telemetry.addData("Back", "LeftStick");
+                telemetry.update();
+                idle();
+                timeStamp = System.currentTimeMillis();
+            }
+            power = -power;
+        }
+
+        // stop the carousel
+        robot.intake.intake.setPower(0);
+        idle();
+    }
+
+    private void slideTest() {
+        final int TIME = 1500;
+        final OcMotorEx motors[] = new OcMotorEx[]{robot.slides.slideRight, robot.slides.slideLeft};
+
+        robot.slides.slideLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.slides.slideRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.slides.slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.slides.slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        // i = 1, slide down until touching the switch and reset the encoder
+        // i = 2, slide up for 1.5 second and ignore the switch
+        // i = 3, slide down until touching the switch and reset the encoder
+        back:
+        for (OcMotorEx motor: motors) {
+            float slidePower = -0.45f;
+            for (int i = 1; i <= 3; i++) {
+                long startTime = System.currentTimeMillis();
+                long timeStamp = startTime;
+                while (opModeIsActive() && timeStamp - startTime < TIME) {
+                    motor.setPower(slidePower);
+
+                    if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                        break back;
+                    } else if (robot.slides.switchSlideDown.isTouch() && i != 2) {
+                        motor.resetPosition();
+                        break;
+                    }
+                    telemetry.addData("Test", "Slide");
+                    telemetry.addData("Back", "LeftStick");
+                    telemetry.addData(motor.toString() + " Position",
+                            integerFormatter.format(motor.getCurrentPosition()));
+                    telemetry.addData(motor.toString() + " Power",
+                            decimalFormatter.format(motor.getPower()));
+                    telemetry.update();
+                    idle();
+                    timeStamp = System.currentTimeMillis();
+                }
+                slidePower = -slidePower;
+                motor.setPower(0);
+            }
+        }
+
+        robot.slides.slideLeft.setPower(0);
+        robot.slides.slideRight.setPower(0);
         idle();
     }
 }
