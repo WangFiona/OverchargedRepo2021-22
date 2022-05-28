@@ -55,11 +55,13 @@ public class RobotMecanum {
     public Localization odometryLocalization = null;
 
     public DistanceSensor sensorDistance;
-    public SensorDistance sensorDistanceR;
-    public SensorDistance sensorDistanceL;
-    public SensorDistance sensorDistanceF;
+    public SensorDistance sensorDistanceR = null;
+    public SensorDistance sensorDistanceL = null;
+    public SensorDistance sensorDistanceF = null;
 
     public AnalogInput sonar = null;
+    public AnalogInput sonarR = null;
+    public AnalogInput sonarL = null;
 
 
     //public
@@ -96,6 +98,16 @@ public class RobotMecanum {
             sonar = hardwareMap.get(AnalogInput.class, "sonar");
         } catch (Exception e) {
             RobotLog.e("missing: sonar " + e.getMessage());
+        }
+        try {
+            sonarR = hardwareMap.get(AnalogInput.class, "sonarR");
+        } catch (Exception e) {
+            RobotLog.e("missing: sonarR " + e.getMessage());
+        }
+        try {
+            sonarL = hardwareMap.get(AnalogInput.class, "sonarL");
+        } catch (Exception e) {
+            RobotLog.e("missing: sonarL " + e.getMessage());
         }
         if(!roadrunner){
             RobotLog.ii(RobotConstants.TAG_R, "Initializing motors");
@@ -217,7 +229,7 @@ public class RobotMecanum {
             numberMissing++;
         }
 
-        try {
+        /*try {
             sensorDistanceR = new SensorDistance(hardwareMap, "rangeR");
         } catch (Exception e) {
             RobotLog.ee(RobotConstants.TAG_R,  "missing: distanceR" + e.getMessage());
@@ -229,7 +241,7 @@ public class RobotMecanum {
         } catch (Exception e) {
             RobotLog.ee(RobotConstants.TAG_R,  "missing: distanceL" + e.getMessage());
             numberMissing++;
-        }
+        }*/
 
         try {
             cup = new Cup(hardwareMap);

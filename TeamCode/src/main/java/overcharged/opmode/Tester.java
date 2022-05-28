@@ -1,7 +1,8 @@
 package overcharged.opmode;
 
+import android.graphics.Color;
+
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.text.DecimalFormat;
@@ -20,14 +22,7 @@ import overcharged.components.Button;
 import overcharged.components.OcLed;
 import overcharged.components.OcMotorEx;
 import overcharged.components.OcServo;
-import overcharged.components.OcSwitch;
 import overcharged.components.RobotMecanum;
-import overcharged.components.Slide;
-import overcharged.components.TurnType;
-import overcharged.config.RobotConstants;
-import overcharged.drive.SampleMecanumDrive;
-import overcharged.linear.components.Robot6WheelLinear;
-import overcharged.linear.components.TankDriveLinear;
 import overcharged.test.MotorTestInfo;
 import overcharged.test.ServoTestInfo;
 
@@ -81,6 +76,9 @@ Tester
         DUCK,
         INTAKE,
         SLIDE,
+        ARM,
+        SENSOR,
+
         ;
 
         private static int numberTests = 0;
@@ -214,6 +212,12 @@ Tester
                         break;
                     case SLIDE:
                         slideTest();
+                        break;
+                    case ARM:
+                        armTest();
+                        break;
+                    case SENSOR:
+                        sensorTest();
                         break;
                     case NONE:
                     default:
@@ -697,6 +701,90 @@ Tester
 
         robot.slides.slideLeft.setPower(0);
         robot.slides.slideRight.setPower(0);
+        idle();
+    }
+
+    /**
+     * Tests each individual servo
+     */
+    private void armTest() {
+        final int TIMEOUT = 1000;
+        final double[] positions = new double[]{robot.arm.mid, 0, robot.arm.mid, robot.arm.out};
+
+        for (int i = 0; i <= positions.length; i++) {
+            double position;
+            if (i < positions.length) {
+                position = positions[i];
+            }
+            else {
+                position = positions[0];
+            }
+
+            long startTimestamp = System.currentTimeMillis();
+            long timeStamp = startTimestamp;
+
+            while (opModeIsActive() &&
+                    timeStamp - startTimestamp < TIMEOUT) {
+                robot.arm.setPosition(position);
+
+                if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                    robot.arm.setPosition(positions[0]);
+                    return;
+                }
+
+                telemetry.addData("Test", "Arm");
+                telemetry.addData("Servo.arm.right", integerFormatter.format(robot.arm.right.getPosition()));
+                telemetry.addData("Servo.arm.left", integerFormatter.format(robot.arm.left.getPosition()));
+                telemetry.addData("Back", "LeftStick");
+
+                telemetry.update();
+                idle();
+                timeStamp = System.currentTimeMillis();
+            }
+            idle();
+        }
+    }
+
+    private void sensorTest() {
+
+        final double SCALE_FACTOR = 255;
+        float cupColorHsvValues[] = {0F, 0F, 0F};
+
+        while (opModeIsActive()) {
+            long timeStamp = System.currentTimeMillis();
+            if (gamepad1.left_stick_button && Button.BTN_BACK.canPress(timeStamp)) {
+                break;
+            }
+            // convert the RGB values to HSV values.
+            // multiply by the SCALE_FACTOR.
+            // then cast it back to int (SCALE_FACTOR is a double)
+            Color.RGBToHSV((int) (robot.cup.colorSensor.red() * SCALE_FACTOR),
+                    (int) (robot.cup.colorSensor.green() * SCALE_FACTOR),
+                    (int) (robot.cup.colorSensor.blue() * SCALE_FACTOR),
+                    cupColorHsvValues);
+
+            telemetry.addData("Test", "Sensors");
+
+            float sonarDistance = (float) (((robot.sonar.getVoltage()*6f*1024f/2.7f)-300f)/25.4f);
+            float sonarActualDistance = (float) (0.9829f * sonarDistance -0.5991);
+            telemetry.addData("Front sonar inch", decimalFormatter.format(sonarActualDistance));
+
+            sonarDistance = (float) (((robot.sonarL.getVoltage()*6f*1024f/2.7f)-300f)/25.4f);
+            sonarActualDistance = (float) (0.9829f * sonarDistance -0.5991);
+            telemetry.addData("Left sonar inch", decimalFormatter.format(sonarActualDistance));
+
+            sonarDistance = (float) (((robot.sonarR.getVoltage()*6f*1024f/2.7f)-300f)/25.4f);
+            sonarActualDistance = (float) (0.9829f * sonarDistance -0.5991);
+            telemetry.addData("Right sonar inch", decimalFormatter.format(sonarActualDistance));
+
+            telemetry.addData("Cup mm", decimalFormatter.format(robot.cup.colorSensor.getDistance(DistanceUnit.MM)));
+            telemetry.addData("Hue cupColor", integerFormatter.format(cupColorHsvValues[0]));
+
+            telemetry.addData("Back", "LeftStick");
+
+            telemetry.update();
+            idle();
+        }
         idle();
     }
 }
