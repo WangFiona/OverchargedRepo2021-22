@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Cap {
     public Servo cap;
-    public static double in = 0.79; //0.8
+    public static double in = 2/255.0; //0.8
     public static double out = 0.60; //0.61
     public static double up = 0.24; //0.25
     public static double capped = 0.40; //0.41

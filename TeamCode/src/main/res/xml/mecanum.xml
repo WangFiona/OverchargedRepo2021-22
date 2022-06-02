@@ -23,9 +23,8 @@
             <goBILDA5202SeriesMotor name="driveRF" port="2" />
             <goBILDA5202SeriesMotor name="driveRB" port="3" />
             <Servo name="armR" port="5" />
-            <!-- Servo name="cap" port="4" />-->
-            <Servo name="cap" port="2" />
-            <Servo name="capClaw" port="4" />
+            <Servo name="cap" port="4" />
+            <Servo name="capClaw" port="2" />
             <!--            <DigitalDevice name="led_blue" port="0" />-->
             <!--            <DigitalDevice name="led_yellow" port="1" />-->
             <!--            <DigitalDevice name="led_white" port="2" />-->
