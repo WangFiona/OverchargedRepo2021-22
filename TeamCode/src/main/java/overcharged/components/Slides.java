@@ -37,7 +37,7 @@ public class Slides {
     //Slide level encoder values
     public static int level3 = 650;
     public static int autoLevel3 = 700;
-    public static int level2 = 395;
+    public static int level2 = 430;
     //starting encoder reading
     private double start;
     ///Disable the slides if the switch says touched even at this encoder level of the slides

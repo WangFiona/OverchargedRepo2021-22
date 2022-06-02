@@ -104,8 +104,8 @@ public class DuckAuto extends LinearOpMode {
                         raiseSlidesThread(lp);
                         robot.intakeOff();
                     })
-                    .lineTo(new Vector2d((blue ? hubX : hubX+2),duckPositions==DuckPositions.C ? ((blue ? -8 : 5)) : ((blue ? -6 : 5))))
-                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+2), duckPositions==DuckPositions.C ? ((blue ? 1 : -1) * (-6)) : ((blue ? 1 : -1) * (-6))), () -> {
+                    .lineTo(new Vector2d((blue ? hubX+2 : hubX+2),duckPositions==DuckPositions.C ? ((blue ? -8 : 5)) : ((blue ? -7 : 25))))
+                    .addSpatialMarker(new Vector2d((blue ? hubX : hubX+2), duckPositions==DuckPositions.C ? ((blue ? 1 : -1) * (-6)) : ((blue ? -6 : 24))), () -> {
                         robot.cupDump();
                     })
                     .build();
